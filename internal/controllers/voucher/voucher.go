@@ -1,11 +1,12 @@
-package product
+package voucher
 
 import (
+	"time"
+
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/entities/voucher"
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/repository/adapter"
 	"github.com/aws/aws-sdk-go/service/dynamodb/expression"
 	"github.com/google/uuid"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/entities/product"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/repository/adapter"
-	"time"
 )
 
 type Controller struct {
@@ -13,10 +14,10 @@ type Controller struct {
 }
 
 type Interface interface {
-	ListOne(ID uuid.UUID) (entity product.Product, err error)
-	ListAll() (entities []product.Product, err error)
-	Create(entity *product.Product) (uuid.UUID, error)
-	Update(ID uuid.UUID, entity *product.Product) error
+	ListOne(ID uuid.UUID) (entity voucher.Voucher, err error)
+	ListAll() (entities []voucher.Voucher, err error)
+	Create(entity *voucher.Voucher) (uuid.UUID, error)
+	Update(ID uuid.UUID, entity *voucher.Voucher) error
 	Remove(ID uuid.UUID) error
 }
 
@@ -24,20 +25,20 @@ func NewController(repository adapter.Interface) Interface {
 	return &Controller{repository: repository}
 }
 
-func (c *Controller) ListOne(id uuid.UUID) (entity product.Product, err error) {
+func (c *Controller) ListOne(id uuid.UUID) (entity voucher.Voucher, err error) {
 	entity.ID = id
 	response, err := c.repository.FindOne(entity.GetFilterId(), entity.TableName())
 	if err != nil {
 		return entity, err
 	}
-	return product.ParseDynamoAtributeToStruct(response.Item)
+	return voucher.ParseDynamoAtributeToStruct(response.Item)
 }
 
-func (c *Controller) ListAll() (entities []product.Product, err error) {
-	entities = []product.Product{}
-	var entity product.Product
+func (c *Controller) ListAll() (entities []voucher.Voucher, err error) {
+	entities = []voucher.Voucher{}
+	var entity voucher.Voucher
 
-	filter := expression.Name("name").NotEqual(expression.Value(""))
+	filter := expression.Name("code").NotEqual(expression.Value(""))
 	condition, err := expression.NewBuilder().WithFilter(filter).Build()
 	if err != nil {
 		return entities, err
@@ -50,7 +51,7 @@ func (c *Controller) ListAll() (entities []product.Product, err error) {
 
 	if response != nil {
 		for _, value := range response.Items {
-			entity, err := product.ParseDynamoAtributeToStruct(value)
+			entity, err := voucher.ParseDynamoAtributeToStruct(value)
 			if err != nil {
 				return entities, err
 			}
@@ -61,20 +62,21 @@ func (c *Controller) ListAll() (entities []product.Product, err error) {
 	return entities, nil
 }
 
-func (c *Controller) Create(entity *product.Product) (uuid.UUID, error) {
+func (c *Controller) Create(entity *voucher.Voucher) (uuid.UUID, error) {
 	entity.CreatedAt = time.Now()
 	_, err := c.repository.CreateOrUpdate(entity.GetMap(), entity.TableName())
 	return entity.ID, err
 }
 
-func (c *Controller) Update(id uuid.UUID, entity *product.Product) error {
+func (c *Controller) Update(id uuid.UUID, entity *voucher.Voucher) error {
 	found, err := c.ListOne(id)
 	if err != nil {
 		return err
 	}
 	found.ID = id
-	found.Name = entity.Name
-	found.UpdatedAt = time.Now()
+	found.Code = entity.Code
+	found.Percentage = entity.Percentage
+	found.UpdatedAt = time.Now().AddDate(0, 1, 0)
 	_, err = c.repository.CreateOrUpdate(found.GetMap(), entity.TableName())
 	return err
 }

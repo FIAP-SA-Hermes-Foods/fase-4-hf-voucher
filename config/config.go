@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/akhil/dynamodb-go-crud-yt/utils/env"
+	"github.com/PauloLucas94/fase-4-hf-voucher/utils/env"
 	"strconv"
 )
 

@@ -1,18 +1,19 @@
-package product
+package voucher
 
 import (
 	"encoding/json"
 	"errors"
+	"io"
+	"strings"
+	"time"
+
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/entities"
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/entities/voucher"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	Validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/google/uuid"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/entities"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/entities/product"
-	"io"
-	"strings"
-	"time"
 )
 
 type Rules struct{}
@@ -33,7 +34,7 @@ func (r *Rules) Migrate(connection *dynamodb.DynamoDB) error {
 }
 
 func (r *Rules) createTable(connection *dynamodb.DynamoDB) error {
-	table := &product.Product{}
+	table := &voucher.Voucher{}
 
 	input := &dynamodb.CreateTableInput{
 		AttributeDefinitions: []*dynamodb.AttributeDefinition{
@@ -69,24 +70,24 @@ func (r *Rules) createTable(connection *dynamodb.DynamoDB) error {
 }
 
 func (r *Rules) GetMock() interface{} {
-	return product.Product{
+	return voucher.Voucher{
 		Base: entities.Base{
 			ID:        uuid.New(),
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 		},
-		Name: uuid.New().String(),
+		Code: uuid.New().String(),
 	}
 }
 
 func (r *Rules) Validate(model interface{}) error {
-	productModel, err := product.InterfaceToModel(model)
+	voucherModel, err := voucher.InterfaceToModel(model)
 	if err != nil {
 		return err
 	}
 
-	return Validation.ValidateStruct(productModel,
-		Validation.Field(&productModel.ID, Validation.Required, is.UUIDv4),
-		Validation.Field(&productModel.Name, Validation.Required, Validation.Length(3, 50)),
+	return Validation.ValidateStruct(voucherModel,
+		Validation.Field(&voucherModel.ID, Validation.Required, is.UUIDv4),
+		Validation.Field(&voucherModel.Code, Validation.Required, Validation.Length(3, 50)),
 	)
 }

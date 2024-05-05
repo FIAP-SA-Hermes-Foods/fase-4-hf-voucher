@@ -1,31 +1,32 @@
-package product
+package voucher
 
 import (
 	"errors"
-	"github.com/go-chi/chi"
-	"github.com/google/uuid"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/controllers/product"
-	EntityProduct "github.com/akhil/dynamodb-go-crud-yt/internal/entities/product"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/handlers"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/repository/adapter"
-	Rules "github.com/akhil/dynamodb-go-crud-yt/internal/rules"
-	RulesProduct "github.com/akhil/dynamodb-go-crud-yt/internal/rules/product"
-	HttpStatus "github.com/akhil/dynamodb-go-crud-yt/utils/http"
 	"net/http"
 	"time"
+
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/controllers/voucher"
+	EntityVoucher "github.com/PauloLucas94/fase-4-hf-voucher/internal/entities/voucher"
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/handlers"
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/repository/adapter"
+	Rules "github.com/PauloLucas94/fase-4-hf-voucher/internal/rules"
+	RulesVoucher "github.com/PauloLucas94/fase-4-hf-voucher/internal/rules/voucher"
+	HttpStatus "github.com/PauloLucas94/fase-4-hf-voucher/utils/http"
+	"github.com/go-chi/chi"
+	"github.com/google/uuid"
 )
 
 type Handler struct {
 	handlers.Interface
 
-	Controller product.Interface
+	Controller voucher.Interface
 	Rules      Rules.Interface
 }
 
 func NewHandler(repository adapter.Interface) handlers.Interface {
 	return &Handler{
-		Controller: product.NewController(repository),
-		Rules:      RulesProduct.NewRules(),
+		Controller: voucher.NewController(repository),
+		Rules:      RulesVoucher.NewRules(),
 	}
 }
 
@@ -64,13 +65,13 @@ func (h *Handler) getAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
-	productBody, err := h.getBodyAndValidate(r, uuid.Nil)
+	voucherBody, err := h.getBodyAndValidate(r, uuid.Nil)
 	if err != nil {
 		HttpStatus.StatusBadRequest(w, r, err)
 		return
 	}
 
-	ID, err := h.Controller.Create(productBody)
+	ID, err := h.Controller.Create(voucherBody)
 	if err != nil {
 		HttpStatus.StatusInternalServerError(w, r, err)
 		return
@@ -86,13 +87,13 @@ func (h *Handler) Put(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	productBody, err := h.getBodyAndValidate(r, ID)
+	voucherBody, err := h.getBodyAndValidate(r, ID)
 	if err != nil {
 		HttpStatus.StatusBadRequest(w, r, err)
 		return
 	}
 
-	if err := h.Controller.Update(ID, productBody); err != nil {
+	if err := h.Controller.Update(ID, voucherBody); err != nil {
 		HttpStatus.StatusInternalServerError(w, r, err)
 		return
 	}
@@ -119,29 +120,29 @@ func (h *Handler) Options(w http.ResponseWriter, r *http.Request) {
 	HttpStatus.StatusNoContent(w, r)
 }
 
-func (h *Handler) getBodyAndValidate(r *http.Request, ID uuid.UUID) (*EntityProduct.Product, error) {
-	productBody := &EntityProduct.Product{}
-	body, err := h.Rules.ConvertIoReaderToStruct(r.Body, productBody)
+func (h *Handler) getBodyAndValidate(r *http.Request, ID uuid.UUID) (*EntityVoucher.Voucher, error) {
+	voucherBody := &EntityVoucher.Voucher{}
+	body, err := h.Rules.ConvertIoReaderToStruct(r.Body, voucherBody)
 	if err != nil {
-		return &EntityProduct.Product{}, errors.New("body is required")
+		return &EntityVoucher.Voucher{}, errors.New("body is required")
 	}
 
-	productParsed, err := EntityProduct.InterfaceToModel(body)
+	voucherParsed, err := EntityVoucher.InterfaceToModel(body)
 	if err != nil {
-		return &EntityProduct.Product{}, errors.New("error on convert body to model")
+		return &EntityVoucher.Voucher{}, errors.New("error on convert body to model")
 	}
 
-	setDefaultValues(productParsed, ID)
+	setDefaultValues(voucherParsed, ID)
 
-	return productParsed, h.Rules.Validate(productParsed)
+	return voucherParsed, h.Rules.Validate(voucherParsed)
 }
 
-func setDefaultValues(product *EntityProduct.Product, ID uuid.UUID) {
-	product.UpdatedAt = time.Now()
+func setDefaultValues(voucher *EntityVoucher.Voucher, ID uuid.UUID) {
+	voucher.UpdatedAt = time.Now().AddDate(0, 1, 0)
 	if ID == uuid.Nil {
-		product.ID = uuid.New()
-		product.CreatedAt = time.Now()
+		voucher.ID = uuid.New()
+		voucher.CreatedAt = time.Now()
 	} else {
-		product.ID = ID
+		voucher.ID = ID
 	}
 }

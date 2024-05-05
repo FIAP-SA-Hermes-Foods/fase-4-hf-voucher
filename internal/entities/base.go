@@ -17,7 +17,7 @@ type Interface interface {
 type Base struct {
 	ID        uuid.UUID `json:"_id"`
 	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	UpdatedAt time.Time `json:"expiresAt"`
 }
 
 func (b *Base) GenerateID() {

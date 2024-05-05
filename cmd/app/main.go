@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/akhil/dynamodb-go-crud-yt/config"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/repository/adapter"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/repository/instance"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/routes"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/rules"
-	RulesProduct "github.com/akhil/dynamodb-go-crud-yt/internal/rules/product"
-	"github.com/akhil/dynamodb-go-crud-yt/utils/logger"
 	"log"
 	"net/http"
+
+	"github.com/PauloLucas94/fase-4-hf-voucher/config"
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/repository/adapter"
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/repository/instance"
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/routes"
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/rules"
+	RulesVoucher "github.com/PauloLucas94/fase-4-hf-voucher/internal/rules/voucher"
+	"github.com/PauloLucas94/fase-4-hf-voucher/utils/logger"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
 
 func main() {
@@ -41,7 +42,7 @@ func main() {
 func Migrate(connection *dynamodb.DynamoDB) []error {
 	var errors []error
 
-	callMigrateAndAppendError(&errors, connection, &RulesProduct.Rules{})
+	callMigrateAndAppendError(&errors, connection, &RulesVoucher.Rules{})
 
 	return errors
 }

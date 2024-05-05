@@ -1,12 +1,12 @@
 package routes
 
 import (
+	ServerConfig "github.com/PauloLucas94/fase-4-hf-voucher/config"
+	HealthHandler "github.com/PauloLucas94/fase-4-hf-voucher/internal/handlers/health"
+	VoucherHandler "github.com/PauloLucas94/fase-4-hf-voucher/internal/handlers/voucher"
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/repository/adapter"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	ServerConfig "github.com/akhil/dynamodb-go-crud-yt/config"
-	HealthHandler "github.com/akhil/dynamodb-go-crud-yt/internal/handlers/health"
-	ProductHandler "github.com/akhil/dynamodb-go-crud-yt/internal/handlers/product"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/repository/adapter"
 )
 
 type Router struct {
@@ -25,7 +25,7 @@ func (r *Router) SetRouters(repository adapter.Interface) *chi.Mux {
 	r.setConfigsRouters()
 
 	r.RouterHealth(repository)
-	r.RouterProduct(repository)
+	r.RouterVoucher(repository)
 
 	return r.router
 }
@@ -51,10 +51,10 @@ func (r *Router) RouterHealth(repository adapter.Interface) {
 	})
 }
 
-func (r *Router) RouterProduct(repository adapter.Interface) {
-	handler := ProductHandler.NewHandler(repository)
+func (r *Router) RouterVoucher(repository adapter.Interface) {
+	handler := VoucherHandler.NewHandler(repository)
 
-	r.router.Route("/product", func(route chi.Router) {
+	r.router.Route("/voucher", func(route chi.Router) {
 		route.Post("/", handler.Post)
 		route.Get("/", handler.Get)
 		route.Get("/{ID}", handler.Get)

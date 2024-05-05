@@ -2,9 +2,9 @@ package health
 
 import (
 	"errors"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/handlers"
-	"github.com/akhil/dynamodb-go-crud-yt/internal/repository/adapter"
-	HttpStatus "github.com/akhil/dynamodb-go-crud-yt/utils/http"
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/handlers"
+	"github.com/PauloLucas94/fase-4-hf-voucher/internal/repository/adapter"
+	HttpStatus "github.com/PauloLucas94/fase-4-hf-voucher/utils/http"
 	"net/http"
 )
 
