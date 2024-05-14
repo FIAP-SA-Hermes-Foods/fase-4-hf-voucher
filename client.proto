@@ -1,0 +1,41 @@
+syntax = "proto3";
+option go_package = "fase-4-hf-client/client-proto";
+
+message CreateRequest {
+  string code = 1;
+  string percentage  = 2;
+  string expiresAt = 3;
+}
+
+message CreateResponse {
+  string uuid = 1;
+  string code = 2;
+  string percentage = 3;
+  string createdAt = 4;
+  string expiresAt = 5;
+}
+
+message GetByIDRequest { int64 id = 1; }
+
+message GetByIDResponse {
+  string uuid = 1;
+  string code = 2;
+  string percentage = 3;
+  string createdAt = 4;
+  string ExpiresAt = 5;
+}
+
+message GetByIDRequest { string id = 1; }
+
+message GetByCPFResponse {
+  string uuid = 1;
+  string code = 2;
+  string percentage = 3;
+  string createdAt = 4;
+  string ExpiresAt = 5;
+}
+
+service Voucher {
+  rpc Create(CreateRequest) returns (CreateResponse);
+  rpc GetByID(GetByIDRequest) returns (GetByIDResponse);
+}
