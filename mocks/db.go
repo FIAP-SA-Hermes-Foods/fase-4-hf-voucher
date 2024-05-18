@@ -13,6 +13,11 @@ type MockDbNoSQL struct {
 	WantErr           error
 }
 
+// UpdateItem implements db.NoSQLDatabase.
+func (m *MockDbNoSQL) UpdateItem(input *dynamodb.UpdateItemInput) (*dynamodb.UpdateItemOutput, error) {
+	panic("unimplemented")
+}
+
 func (m MockDbNoSQL) Scan(input *dynamodb.ScanInput) (*dynamodb.ScanOutput, error) {
 	if m.WantErr != nil && strings.EqualFold("errScan", m.WantErr.Error()) {
 		return nil, m.WantErr

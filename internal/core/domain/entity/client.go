@@ -7,7 +7,7 @@ import (
 type Voucher struct {
 	ID        	int64        		`json:"id,omitempty"`
 	Code      	string       		`json:"code,omitempty"`
-	Percentage  vo.Percentage       `json:"percentage,omitempty"`
+	Percentage  int64       		`json:"percentage,omitempty"`
 	CreatedAt 	vo.CreatedAt 		`json:"createdAt,omitempty"`
 	ExpiresAt   vo.ExpiresAt      	`json:"expiresAt,omitempty"`
 }

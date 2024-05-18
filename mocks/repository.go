@@ -11,6 +11,11 @@ type MockVoucherRepository struct {
 	WantErr     error
 }
 
+// UpdateVoucherByID implements repository.VoucherRepository.
+func (m MockVoucherRepository) UpdateVoucherByID(id string, voucher dto.VoucherDB) (*dto.VoucherDB, error) {
+	panic("unimplemented")
+}
+
 func (m MockVoucherRepository) GetVoucherByID(id string) (*dto.VoucherDB, error) {
 	if m.WantErr != nil && strings.EqualFold("errGetVoucherByID", m.WantErr.Error()) {
 		return nil, m.WantErr

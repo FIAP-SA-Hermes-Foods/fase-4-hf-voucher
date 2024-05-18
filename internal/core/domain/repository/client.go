@@ -7,4 +7,5 @@ import (
 type VoucherRepository interface {
 	GetVoucherByID(id string) (*dto.VoucherDB, error)
 	SaveVoucher(voucher dto.VoucherDB) (*dto.VoucherDB, error)
+	UpdateVoucherByID(id string, voucher dto.VoucherDB) (*dto.VoucherDB, error)
 }

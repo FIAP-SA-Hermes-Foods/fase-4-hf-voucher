@@ -11,6 +11,11 @@ type MockApplication struct {
 	WantOutNull string
 }
 
+// UpdateVoucherByID implements application.Application.
+func (m MockApplication) UpdateVoucherByID(id string, voucher dto.RequestVoucher) (*dto.OutputVoucher, error) {
+	panic("unimplemented")
+}
+
 func (m MockApplication) GetVoucherByID(id string) (*dto.OutputVoucher, error) {
 	if m.WantErr != nil && strings.EqualFold("errGetVoucherByID", m.WantErr.Error()) {
 		return nil, m.WantErr
@@ -30,6 +35,10 @@ func (m MockApplication) SaveVoucher(reqVoucher dto.RequestVoucher) (*dto.Output
 	}
 	return m.WantOut, nil
 }
+
+// GetVoucherByID(id string) (*dto.OutputVoucher, error)
+// SaveVoucher(reqVoucher dto.RequestVoucher) (*dto.OutputVoucher, error)
+// UpdateVoucherByID(id string, voucher dto.RequestVoucher) (*dto.OutputVoucher, error)
 
 // Repository Callers
 type MockApplicationRepostoryCallers struct {

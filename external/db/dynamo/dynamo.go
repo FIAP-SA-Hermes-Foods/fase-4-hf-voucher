@@ -31,3 +31,10 @@ func (d *dynamoDB) PutItem(input *dynamodb.PutItemInput) (*dynamodb.PutItemOutpu
 	}
 	return d.voucher.PutItem(input)
 }
+
+func (d *dynamoDB) UpdateItem(input *dynamodb.UpdateItemInput) (*dynamodb.UpdateItemOutput, error) {
+	if d.voucher == nil {
+		d.voucherDynamo()
+	}
+	return d.voucher.UpdateItem(input)
+}

@@ -2,6 +2,9 @@ package dto
 
 import (
 	"fase-4-hf-voucher/internal/core/domain/entity"
+	vo "fase-4-hf-voucher/internal/core/domain/entity/valueObject"
+	"strconv"
+	"time"
 )
 
 type VoucherDB struct {
@@ -31,11 +34,19 @@ type (
 )
 
 func (r RequestVoucher) Voucher() entity.Voucher {
+	expirationTime, _ := time.Parse("02-01-2006 15:04:05", r.ExpiresAt)
+	createdAt, _ := time.Parse("02-01-2006 15:04:05", r.CreatedAt)
+
+	percentage, _ := strconv.ParseInt(r.Percentage, 10, 64) // Convert r.Percentage to int64
+
 	return entity.Voucher{
-		Code: r.Code,
-		// r.uuid: vo.uuid{
-		// 	Value: r.uuid,
-		// },
-		Percentage: r.Percentage,
+		Code:       r.Code,
+		Percentage: percentage, // Use the converted value
+		ExpiresAt: vo.ExpiresAt{
+			Value: &expirationTime,
+		},
+		CreatedAt: vo.CreatedAt{
+			Value: createdAt,
+		},
 	}
 }

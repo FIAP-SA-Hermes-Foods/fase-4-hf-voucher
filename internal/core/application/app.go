@@ -14,6 +14,7 @@ import (
 type Application interface {
 	GetVoucherByID(id string) (*dto.OutputVoucher, error)
 	SaveVoucher(reqVoucher dto.RequestVoucher) (*dto.OutputVoucher, error)
+	UpdateVoucherByID(id string, voucher dto.RequestVoucher) (*dto.OutputVoucher, error)
 }
 
 type application struct {
@@ -106,4 +107,40 @@ func (app application) SaveVoucher(voucher dto.RequestVoucher) (*dto.OutputVouch
 	l.Infof("SaveVoucherApp output: ", " | ", ps.MarshalString(out))
 
 	return out, nil
+}
+
+func (app application) UpdateVoucherByID(id string, voucher dto.RequestVoucher) (*dto.OutputVoucher, error) {
+	l.Infof("UpdateVoucherByIDApp: ", " | ", id, " | ", ps.MarshalString(voucher))
+
+	err := app.UpdateVoucherByIDUseCase(id, voucher)
+
+	if err != nil {
+		l.Errorf("UpdateVoucherByIDApp error: ", " | ", err)
+		return nil, err
+	}
+
+	voucherDB := dto.VoucherDB{
+		Code:       voucher.Code,
+		Percentage: voucher.Percentage,
+		CreatedAt:  voucher.CreatedAt,
+		ExpiresAt:  voucher.ExpiresAt,
+	}
+
+	rVoucher, err := app.UpdateVoucherByIDRepository(id, voucherDB)
+
+	if err != nil {
+		l.Errorf("UpdateVoucherByIDApp error: ", " | ", err)
+		return nil, err
+	}
+
+	vOut := dto.OutputVoucher{
+		UUID:       rVoucher.UUID,
+		Code:       rVoucher.Code,
+		Percentage: rVoucher.Percentage,
+		CreatedAt:  rVoucher.CreatedAt,
+		ExpiresAt:  rVoucher.ExpiresAt,
+	}
+
+	l.Infof("UpdateVoucherByIDApp output: ", " | ", ps.MarshalString(vOut))
+	return &vOut, nil
 }

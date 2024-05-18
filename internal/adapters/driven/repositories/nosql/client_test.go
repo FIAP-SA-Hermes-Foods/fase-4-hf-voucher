@@ -93,7 +93,7 @@ func Test_GetVoucherByID(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			repo := NewVoucherRepository(tc.mockDB, "")
 
-			out, err := repo.Test_GetVoucherByID(tc.args.VoucherID)
+			out, err := repo.GetVoucherByID(tc.args.VoucherID)
 
 			if (!tc.isWantError) && err != nil {
 				t.Errorf("was not suppose to have an error here and %v got", err)

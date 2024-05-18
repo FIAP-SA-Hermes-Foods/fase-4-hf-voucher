@@ -1,13 +1,13 @@
 package main
 
 import (
-	cp "fase-4-hf-voucher/client_proto"
 	"fase-4-hf-voucher/external/db/dynamo"
 	l "fase-4-hf-voucher/external/logger"
 	repositories "fase-4-hf-voucher/internal/adapters/driven/repositories/nosql"
 	"fase-4-hf-voucher/internal/core/application"
 	"fase-4-hf-voucher/internal/core/useCase"
 	grpcH "fase-4-hf-voucher/internal/handler/rpc"
+	cp "fase-4-hf-voucher/voucher_proto"
 	"net"
 	"os"
 
