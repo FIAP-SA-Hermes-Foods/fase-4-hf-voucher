@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-// go test -v -count=1 -failfast -run ^Test_Get$
+// go test -v -count=1 -failfast -run ^Test_GetVoucherByID$
 func Test_GetVoucherByID(t *testing.T) {
 	type args struct {
 		id string
@@ -166,11 +166,11 @@ func Test_SaveVoucher(t *testing.T) {
 				WantErr: nil,
 			},
 			wantOut: dto.OutputVoucher{
-				UUID:      "001",
-				Code:      "MYDISCOUNTCODE10",
-				Percentage:       "10",
-				CreatedAt: "2001-01-01 15:30:00",
-				ExpiresAt: "2001-01-01 15:30:00",
+				UUID:       "001",
+				Code:       "MYDISCOUNTCODE10",
+				Percentage: "10",
+				CreatedAt:  "2001-01-01 15:30:00",
+				ExpiresAt:  "2001-01-01 15:30:00",
 			},
 			isWantedError: false,
 		},
@@ -179,20 +179,20 @@ func Test_SaveVoucher(t *testing.T) {
 			name: "error_user_exists",
 			args: args{
 				req: dto.RequestVoucher{
-					UUID:      "001",
-					Code:      "MYDISCOUNTCODE10",
-					Percentage:       "10",
-					CreatedAt: "2001-01-01 15:30:00",
-					ExpiresAt: "2001-01-01 15:30:00",
+					UUID:       "001",
+					Code:       "MYDISCOUNTCODE10",
+					Percentage: "10",
+					CreatedAt:  "2001-01-01 15:30:00",
+					ExpiresAt:  "2001-01-01 15:30:00",
 				},
 			},
 			mockRepository: mocks.MockVoucherRepository{
 				WantOut: &dto.VoucherDB{
-					UUID:      "001",
-					Code:      "MYDISCOUNTCODE10",
-					Percentage:       "10",
-					CreatedAt: "2001-01-01 15:30:00",
-					ExpiresAt: "2001-01-01 15:30:00",
+					UUID:       "001",
+					Code:       "MYDISCOUNTCODE10",
+					Percentage: "10",
+					CreatedAt:  "2001-01-01 15:30:00",
+					ExpiresAt:  "2001-01-01 15:30:00",
 				},
 				WantErr: nil,
 			},
@@ -200,11 +200,11 @@ func Test_SaveVoucher(t *testing.T) {
 				WantErr: nil,
 			},
 			wantOut: dto.OutputVoucher{
-				UUID:      "001",
-				Code:      "MYDISCOUNTCODE10",
-				Percentage:       "10",
-				CreatedAt: "2001-01-01 15:30:00",
-				ExpiresAt: "2001-01-01 15:30:00",
+				UUID:       "001",
+				Code:       "MYDISCOUNTCODE10",
+				Percentage: "10",
+				CreatedAt:  "2001-01-01 15:30:00",
+				ExpiresAt:  "2001-01-01 15:30:00",
 			},
 			isWantedError: true,
 		},
@@ -212,11 +212,11 @@ func Test_SaveVoucher(t *testing.T) {
 			name: "error_useCase",
 			args: args{
 				req: dto.RequestVoucher{
-					UUID:      "001",
-					Code:      "MYDISCOUNTCODE10",
-					Percentage:       "10",
-					CreatedAt: "2001-01-01 15:30:00",
-					ExpiresAt: "2001-01-01 15:30:00",
+					UUID:       "001",
+					Code:       "MYDISCOUNTCODE10",
+					Percentage: "10",
+					CreatedAt:  "2001-01-01 15:30:00",
+					ExpiresAt:  "2001-01-01 15:30:00",
 				},
 			},
 			mockRepository: mocks.MockVoucherRepository{
@@ -227,11 +227,11 @@ func Test_SaveVoucher(t *testing.T) {
 				WantErr: errors.New("errSaveVoucher"),
 			},
 			wantOut: dto.OutputVoucher{
-				UUID:      "001",
-				Code:      "MYDISCOUNTCODE10",
-				Percentage:       "10",
-				CreatedAt: "2001-01-01 15:30:00",
-				ExpiresAt: "2001-01-01 15:30:00",
+				UUID:       "001",
+				Code:       "MYDISCOUNTCODE10",
+				Percentage: "10",
+				CreatedAt:  "2001-01-01 15:30:00",
+				ExpiresAt:  "2001-01-01 15:30:00",
 			},
 			isWantedError: true,
 		},
@@ -239,11 +239,11 @@ func Test_SaveVoucher(t *testing.T) {
 			name: "error_repository",
 			args: args{
 				req: dto.RequestVoucher{
-					UUID:      "001",
-					Code:      "MYDISCOUNTCODE10",
-					Percentage:       "10",
-					CreatedAt: "2001-01-01 15:30:00",
-					ExpiresAt: "2001-01-01 15:30:00",
+					UUID:       "001",
+					Code:       "MYDISCOUNTCODE10",
+					Percentage: "10",
+					CreatedAt:  "2001-01-01 15:30:00",
+					ExpiresAt:  "2001-01-01 15:30:00",
 				},
 			},
 			mockRepository: mocks.MockVoucherRepository{
@@ -254,11 +254,11 @@ func Test_SaveVoucher(t *testing.T) {
 				WantErr: nil,
 			},
 			wantOut: dto.OutputVoucher{
-				UUID:      "001",
-				Code:      "MYDISCOUNTCODE10",
-				Percentage:       "10",
-				CreatedAt: "2001-01-01 15:30:00",
-				ExpiresAt: "2001-01-01 15:30:00",
+				UUID:       "001",
+				Code:       "MYDISCOUNTCODE10",
+				Percentage: "10",
+				CreatedAt:  "2001-01-01 15:30:00",
+				ExpiresAt:  "2001-01-01 15:30:00",
 			},
 			isWantedError: true,
 		},
@@ -266,11 +266,11 @@ func Test_SaveVoucher(t *testing.T) {
 			name: "error_getVoucherByID",
 			args: args{
 				req: dto.RequestVoucher{
-					UUID:      "001",
-					Code:      "MYDISCOUNTCODE10",
-					Percentage:       "10",
-					CreatedAt: "2001-01-01 15:30:00",
-					ExpiresAt: "2001-01-01 15:30:00",
+					UUID:       "001",
+					Code:       "MYDISCOUNTCODE10",
+					Percentage: "10",
+					CreatedAt:  "2001-01-01 15:30:00",
+					ExpiresAt:  "2001-01-01 15:30:00",
 				},
 			},
 			mockRepository: mocks.MockVoucherRepository{
@@ -281,11 +281,11 @@ func Test_SaveVoucher(t *testing.T) {
 				WantErr: nil,
 			},
 			wantOut: dto.OutputVoucher{
-				UUID:      "001",
-				Code:      "MYDISCOUNTCODE10",
-				Percentage:       "10",
-				CreatedAt: "2001-01-01 15:30:00",
-				ExpiresAt: "2001-01-01 15:30:00",
+				UUID:       "001",
+				Code:       "MYDISCOUNTCODE10",
+				Percentage: "10",
+				CreatedAt:  "2001-01-01 15:30:00",
+				ExpiresAt:  "2001-01-01 15:30:00",
 			},
 			isWantedError: true,
 		},

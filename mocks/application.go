@@ -36,10 +36,6 @@ func (m MockApplication) SaveVoucher(reqVoucher dto.RequestVoucher) (*dto.Output
 	return m.WantOut, nil
 }
 
-// GetVoucherByID(id string) (*dto.OutputVoucher, error)
-// SaveVoucher(reqVoucher dto.RequestVoucher) (*dto.OutputVoucher, error)
-// UpdateVoucherByID(id string, voucher dto.RequestVoucher) (*dto.OutputVoucher, error)
-
 // Repository Callers
 type MockApplicationRepostoryCallers struct {
 	WantOut *dto.VoucherDB

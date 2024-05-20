@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fase-4-hf-voucher/external/db/dynamo"
 	l "fase-4-hf-voucher/external/logger"
 	repositories "fase-4-hf-voucher/internal/adapters/driven/repositories/nosql"
@@ -11,8 +12,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/marcos-dev88/genv"
 )
 
@@ -25,15 +25,15 @@ func init() {
 func main() {
 
 	router := http.NewServeMux()
-	configAws := aws.NewConfig()
-	configAws.Region = aws.String("us-east-1")
 
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		Config:            *configAws,
-		SharedConfigState: session.SharedConfigEnable,
-	}))
+	ctx := context.Background()
 
-	db := dynamo.NewDynamoDB(sess)
+	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-east-1"))
+	if err != nil {
+		log.Fatalf("unable to load SDK config, %v", err)
+	}
+
+	db := dynamo.NewDynamoDB(cfg)
 
 	repo := repositories.NewVoucherRepository(db, os.Getenv("DB_TABLE"))
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fase-4-hf-voucher/external/db/dynamo"
 	l "fase-4-hf-voucher/external/logger"
 	repositories "fase-4-hf-voucher/internal/adapters/driven/repositories/nosql"
@@ -8,11 +9,11 @@ import (
 	"fase-4-hf-voucher/internal/core/useCase"
 	grpcH "fase-4-hf-voucher/internal/handler/rpc"
 	cp "fase-4-hf-voucher/voucher_proto"
+	"log"
 	"net"
 	"os"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/marcos-dev88/genv"
 	"google.golang.org/grpc"
 )
@@ -24,8 +25,9 @@ func init() {
 }
 
 func main() {
+	ctx := context.Background()
 
-	listener, err := net.Listen("tcp", os.Getenv("GRPC_VOUCHER_PORT"))
+	listener, err := net.Listen("tcp", os.Getenv("API_RPC_PORT"))
 
 	if err != nil {
 		l.Errorf("error to create connection %v", " | ", err)
@@ -33,15 +35,12 @@ func main() {
 
 	defer listener.Close()
 
-	configAws := aws.NewConfig()
-	configAws.Region = aws.String("us-east-1")
+	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-east-1"))
+	if err != nil {
+		log.Fatalf("unable to load SDK config, %v", err)
+	}
 
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		Config:            *configAws,
-		SharedConfigState: session.SharedConfigEnable,
-	}))
-
-	db := dynamo.NewDynamoDB(sess)
+	db := dynamo.NewDynamoDB(cfg)
 
 	repo := repositories.NewVoucherRepository(db, os.Getenv("DB_TABLE"))
 

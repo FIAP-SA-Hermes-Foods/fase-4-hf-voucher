@@ -1,0 +1,9 @@
+FROM golang:1.22
+
+WORKDIR /fase-4-hf-voucher/src/app
+
+COPY . .
+
+ENV GOPATH=/fase-4-hf-voucher
+
+RUN go test -v -count=1 -cover -failfast -coverprofile cover.out ./cmd/bdd/bdd_test.go

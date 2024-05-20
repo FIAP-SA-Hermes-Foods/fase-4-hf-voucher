@@ -10,6 +10,6 @@ func (app application) SaveVoucherUseCase(voucher dto.RequestVoucher) error {
 	return app.voucherUC.SaveVoucher(voucher)
 }
 
-func(app application) UpdateVoucherByIDUseCase(id string, voucher dto.RequestVoucher) error {
+func (app application) UpdateVoucherByIDUseCase(id string, voucher dto.RequestVoucher) error {
 	return app.voucherUC.UpdateVoucherByID(id, voucher)
 }

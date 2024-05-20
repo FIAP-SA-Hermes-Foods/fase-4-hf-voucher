@@ -41,8 +41,6 @@ func (c voucherUseCase) GetVoucherByID(id string) error {
 	return nil
 }
 
-
-// Remove the duplicate method declaration
 func (c voucherUseCase) UpdateVoucherByID(id string, reqVoucher dto.RequestVoucher) error {
 	if len(id) == 0 {
 		return errors.New("the id is not valid for consult")

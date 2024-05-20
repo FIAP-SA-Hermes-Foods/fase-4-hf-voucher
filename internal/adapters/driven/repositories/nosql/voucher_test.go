@@ -11,8 +11,8 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
 // go test -v -count=1 -failfast -cover -run ^Test_GetVoucherByID$
@@ -62,22 +62,25 @@ func Test_GetVoucherByID(t *testing.T) {
 			},
 			mockDB: &mocks.MockDbNoSQL{
 				WantResultScan: &dynamodb.ScanOutput{
-					Items: []map[string]*dynamodb.AttributeValue{
+					Items: []map[string]types.AttributeValue{
 						{
-							"uuid": {
-								S: aws.String("a0all-b000-caa000-daa00"),
+							"uuid": &types.AttributeValueMemberS{
+								Value: "a0all-b000-caa000-daa00",
 							},
-							"code": {
-								S: aws.String("some_name"),
+							"code": &types.AttributeValueMemberS{
+								Value: "some_name",
 							},
-							"percentage": {
-								S: aws.String("10"),
+							"percentage": &types.AttributeValueMemberS{
+
+								Value: "10",
 							},
-							"created_at": {
-								S: aws.String("2001-01-01 15:30:20"),
+							"created_at": &types.AttributeValueMemberS{
+
+								Value: "2001-01-01 15:30:20",
 							},
-							"expires_at": {
-								S: aws.String("2001-01-01 15:30:20"),
+							"expires_at": &types.AttributeValueMemberS{
+
+								Value: "2001-01-01 15:30:20",
 							},
 						},
 					},

@@ -1,12 +1,12 @@
 package application
 
 import (
-	"errors"
 	l "fase-4-hf-voucher/external/logger"
 	ps "fase-4-hf-voucher/external/strings"
 	"fase-4-hf-voucher/internal/core/domain/entity/dto"
 	"fase-4-hf-voucher/internal/core/domain/repository"
 	"fase-4-hf-voucher/internal/core/domain/useCase"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -59,28 +59,19 @@ func (app application) GetVoucherByID(id string) (*dto.OutputVoucher, error) {
 
 func (app application) SaveVoucher(voucher dto.RequestVoucher) (*dto.OutputVoucher, error) {
 	l.Infof("SaveVoucherApp: ", " | ", ps.MarshalString(voucher))
-	voucherWithId, err := app.GetVoucherByID(voucher.UUID)
-
-	if err != nil {
-		l.Errorf("SaveVoucherApp error: ", " | ", err)
-		return nil, err
-	}
-
-	if voucherWithId != nil {
-		l.Errorf("SaveVoucherApp error: ", " | ", "is not possible to save voucher because this id is already in use")
-		return nil, errors.New("is not possible to save voucher because this id is already in use")
-	}
 
 	if err := app.SaveVoucherUseCase(voucher); err != nil {
 		l.Errorf("SaveVoucherApp error: ", " | ", err)
 		return nil, err
 	}
 
+	createdAtFmt := time.Now().Format(`02-01-2006 15:04:05`)
+
 	voucherDB := dto.VoucherDB{
 		UUID:       uuid.NewString(),
 		Code:       voucher.Code,
 		Percentage: voucher.Percentage,
-		CreatedAt:  voucher.CreatedAt,
+		CreatedAt:  createdAtFmt,
 		ExpiresAt:  voucher.ExpiresAt,
 	}
 
@@ -112,18 +103,50 @@ func (app application) SaveVoucher(voucher dto.RequestVoucher) (*dto.OutputVouch
 func (app application) UpdateVoucherByID(id string, voucher dto.RequestVoucher) (*dto.OutputVoucher, error) {
 	l.Infof("UpdateVoucherByIDApp: ", " | ", id, " | ", ps.MarshalString(voucher))
 
-	err := app.UpdateVoucherByIDUseCase(id, voucher)
+	foundVoucher, err := app.GetVoucherByID(id)
 
 	if err != nil {
 		l.Errorf("UpdateVoucherByIDApp error: ", " | ", err)
 		return nil, err
 	}
 
+	if foundVoucher == nil {
+		return nil, nil
+	}
+
+	if err := app.UpdateVoucherByIDUseCase(id, voucher); err != nil {
+		l.Errorf("UpdateVoucherByIDApp error: ", " | ", err)
+		return nil, err
+	}
+
+	var (
+		code       = foundVoucher.Code
+		percentage = foundVoucher.Percentage
+		createdAt  = foundVoucher.CreatedAt
+		expiresAt  = foundVoucher.ExpiresAt
+	)
+
+	if len(voucher.Code) != 0 {
+		code = voucher.Code
+	}
+
+	if len(voucher.Percentage) != 0 {
+		percentage = voucher.Percentage
+	}
+
+	if len(voucher.CreatedAt) != 0 {
+		createdAt = voucher.CreatedAt
+	}
+
+	if len(voucher.Code) != 0 {
+		expiresAt = voucher.ExpiresAt
+	}
+
 	voucherDB := dto.VoucherDB{
-		Code:       voucher.Code,
-		Percentage: voucher.Percentage,
-		CreatedAt:  voucher.CreatedAt,
-		ExpiresAt:  voucher.ExpiresAt,
+		Code:       code,
+		Percentage: percentage,
+		CreatedAt:  createdAt,
+		ExpiresAt:  expiresAt,
 	}
 
 	rVoucher, err := app.UpdateVoucherByIDRepository(id, voucherDB)

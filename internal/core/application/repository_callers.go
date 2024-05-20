@@ -13,5 +13,3 @@ func (app application) SaveVoucherRepository(voucher dto.VoucherDB) (*dto.Vouche
 func (app application) UpdateVoucherByIDRepository(id string, voucher dto.VoucherDB) (*dto.VoucherDB, error) {
 	return app.voucherRepo.UpdateVoucherByID(id, voucher)
 }
-
-

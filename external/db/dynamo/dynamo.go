@@ -1,40 +1,62 @@
 package dynamo
 
 import (
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"context"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
 type dynamoDB struct {
-	session *session.Session
-	voucher *dynamodb.DynamoDB
+	ctx    context.Context
+	config aws.Config
+	client *dynamodb.Client
 }
 
-func NewDynamoDB(session *session.Session) *dynamoDB {
-	return &dynamoDB{session: session}
+func NewDynamoDB(config aws.Config) *dynamoDB {
+	return &dynamoDB{config: config}
 }
 
 func (d *dynamoDB) voucherDynamo() {
-	d.voucher = dynamodb.New(d.session)
+	d.client = dynamodb.NewFromConfig(d.config)
 }
 
 func (d *dynamoDB) Scan(input *dynamodb.ScanInput) (*dynamodb.ScanOutput, error) {
-	if d.voucher == nil {
+	if d.client == nil {
 		d.voucherDynamo()
 	}
-	return d.voucher.Scan(input)
+	if d.ctx == nil {
+		d.ctx = context.Background()
+	}
+	return d.client.Scan(d.ctx, input)
 }
 
 func (d *dynamoDB) PutItem(input *dynamodb.PutItemInput) (*dynamodb.PutItemOutput, error) {
-	if d.voucher == nil {
+	if d.client == nil {
 		d.voucherDynamo()
 	}
-	return d.voucher.PutItem(input)
+	if d.ctx == nil {
+		d.ctx = context.Background()
+	}
+	return d.client.PutItem(d.ctx, input)
 }
 
 func (d *dynamoDB) UpdateItem(input *dynamodb.UpdateItemInput) (*dynamodb.UpdateItemOutput, error) {
-	if d.voucher == nil {
+	if d.client == nil {
 		d.voucherDynamo()
 	}
-	return d.voucher.UpdateItem(input)
+	if d.ctx == nil {
+		d.ctx = context.Background()
+	}
+	return d.client.UpdateItem(d.ctx, input)
+}
+
+func (d *dynamoDB) Query(input *dynamodb.QueryInput) (*dynamodb.QueryOutput, error) {
+	if d.client == nil {
+		d.voucherDynamo()
+	}
+	if d.ctx == nil {
+		d.ctx = context.Background()
+	}
+	return d.client.Query(d.ctx, input)
 }

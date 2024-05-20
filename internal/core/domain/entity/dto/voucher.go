@@ -11,8 +11,8 @@ type VoucherDB struct {
 	UUID       string `json:"uuid,omitempty"`
 	Code       string `json:"code,omitempty"`
 	Percentage string `json:"percentage,omitempty"`
-	CreatedAt  string `json:"created_at,omitempty"`
-	ExpiresAt  string `json:"expires_at,omitempty"`
+	CreatedAt  string `json:"createdAt,omitempty"`
+	ExpiresAt  string `json:"expiresAt,omitempty"`
 }
 
 type (
@@ -20,16 +20,16 @@ type (
 		UUID       string `json:"uuid,omitempty"`
 		Code       string `json:"code,omitempty"`
 		Percentage string `json:"percentage,omitempty"`
-		CreatedAt  string `json:"created_at,omitempty"`
-		ExpiresAt  string `json:"expires_at,omitempty"`
+		CreatedAt  string `json:"createdAt,omitempty"`
+		ExpiresAt  string `json:"expiresAt,omitempty"`
 	}
 
 	OutputVoucher struct {
 		UUID       string `json:"uuid,omitempty"`
 		Code       string `json:"code,omitempty"`
 		Percentage string `json:"percentage,omitempty"`
-		CreatedAt  string `json:"created_at,omitempty"`
-		ExpiresAt  string `json:"expires_at,omitempty"`
+		CreatedAt  string `json:"createdAt,omitempty"`
+		ExpiresAt  string `json:"expiresAt,omitempty"`
 	}
 )
 
