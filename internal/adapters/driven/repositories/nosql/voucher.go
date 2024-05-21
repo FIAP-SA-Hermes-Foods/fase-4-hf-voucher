@@ -143,14 +143,3 @@ func (c *voucherDB) UpdateVoucherByID(id string, voucher dto.VoucherDB) (*dto.Vo
 
 	return out, nil
 }
-
-func buildUpdateExpression(updates map[string]types.AttributeValue) string {
-	expression := ""
-	for key, _ := range updates {
-		if expression != "" {
-			expression += ", "
-		}
-		expression += key + " = :" + key
-	}
-	return expression
-}

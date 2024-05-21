@@ -14,6 +14,6 @@ run-terraform:
 
 run-bdd:
 	docker build -f ./infrastructure/docker/Dockerfile.go_app_bdd -t hf-voucher-bdd:latest .;
-	docker run --name hf-voucher-bdd hf-voucher-bdd:latest
+	docker run --rm --name hf-voucher-bdd hf-voucher-bdd:latest
 	@docker rmi -f hf-voucher-bdd >/dev/null 2>&1
 	@docker rm $$(docker ps -a -f status=exited -q) -f >/dev/null 2>&1
