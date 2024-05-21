@@ -17,13 +17,13 @@ func NewDynamoDB(config aws.Config) *dynamoDB {
 	return &dynamoDB{config: config}
 }
 
-func (d *dynamoDB) voucherDynamo() {
+func (d *dynamoDB) clientDynamo() {
 	d.client = dynamodb.NewFromConfig(d.config)
 }
 
 func (d *dynamoDB) Scan(input *dynamodb.ScanInput) (*dynamodb.ScanOutput, error) {
 	if d.client == nil {
-		d.voucherDynamo()
+		d.clientDynamo()
 	}
 	if d.ctx == nil {
 		d.ctx = context.Background()
@@ -33,7 +33,7 @@ func (d *dynamoDB) Scan(input *dynamodb.ScanInput) (*dynamodb.ScanOutput, error)
 
 func (d *dynamoDB) PutItem(input *dynamodb.PutItemInput) (*dynamodb.PutItemOutput, error) {
 	if d.client == nil {
-		d.voucherDynamo()
+		d.clientDynamo()
 	}
 	if d.ctx == nil {
 		d.ctx = context.Background()
@@ -43,7 +43,7 @@ func (d *dynamoDB) PutItem(input *dynamodb.PutItemInput) (*dynamodb.PutItemOutpu
 
 func (d *dynamoDB) UpdateItem(input *dynamodb.UpdateItemInput) (*dynamodb.UpdateItemOutput, error) {
 	if d.client == nil {
-		d.voucherDynamo()
+		d.clientDynamo()
 	}
 	if d.ctx == nil {
 		d.ctx = context.Background()
@@ -53,7 +53,7 @@ func (d *dynamoDB) UpdateItem(input *dynamodb.UpdateItemInput) (*dynamodb.Update
 
 func (d *dynamoDB) Query(input *dynamodb.QueryInput) (*dynamodb.QueryOutput, error) {
 	if d.client == nil {
-		d.voucherDynamo()
+		d.clientDynamo()
 	}
 	if d.ctx == nil {
 		d.ctx = context.Background()

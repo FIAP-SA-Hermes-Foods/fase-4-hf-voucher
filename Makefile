@@ -5,8 +5,6 @@ build-proto:
 	--go_opt=paths=source_relative \
 	--go-grpc_out=voucher_proto \
 	--go-grpc_opt=paths=source_relative \
-	--plugin=protoc-gen-go=/home/lucas94/go/bin/protoc-gen-go \
-	--plugin=protoc-gen-go-grpc=/home/lucas94/go/bin/protoc-gen-go-grpc \
 	voucher.proto
 
 run-terraform:
