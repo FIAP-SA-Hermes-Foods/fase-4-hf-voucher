@@ -26,14 +26,13 @@ func (h *handlerGRPC) Handler() *handlerGRPC {
 	return h
 }
 
-func (h *handlerGRPC) Create(ctx context.Context, req *cp.CreateRequest) (*cp.CreateResponse, error) {
-	
+func (h *handlerGRPC) CreateVoucher(ctx context.Context, req *cp.CreateVoucherRequest) (*cp.CreateVoucherResponse, error) {
+
 	input := dto.RequestVoucher{
 		Code:       req.Code,
 		Percentage: strconv.FormatInt(req.Percentage, 10),
 		ExpiresAt:  req.ExpiresAt,
 	}
-
 
 	c, err := h.app.SaveVoucher(input)
 
@@ -45,13 +44,12 @@ func (h *handlerGRPC) Create(ctx context.Context, req *cp.CreateRequest) (*cp.Cr
 		return nil, nil
 	}
 
-
 	percentage, err := strconv.ParseInt(c.Percentage, 10, 64)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse percentage: %v", err)
 	}
-	out := &cp.CreateResponse{
+	out := &cp.CreateVoucherResponse{
 		Uuid:       c.UUID,
 		Code:       c.Code,
 		Percentage: percentage,
@@ -63,7 +61,7 @@ func (h *handlerGRPC) Create(ctx context.Context, req *cp.CreateRequest) (*cp.Cr
 
 }
 
-func (h *handlerGRPC) GetById(ctx context.Context, req *cp.GetByIDRequest) (*cp.GetByIDResponse, error) {
+func (h *handlerGRPC) GetVoucherByID(ctx context.Context, req *cp.GetVoucherByIDRequest) (*cp.GetVoucherByIDResponse, error) {
 
 	c, err := h.app.GetVoucherByID(req.Uuid)
 
@@ -81,7 +79,7 @@ func (h *handlerGRPC) GetById(ctx context.Context, req *cp.GetByIDRequest) (*cp.
 		return nil, fmt.Errorf("failed to parse percentage: %v", err)
 	}
 
-	out := &cp.GetByIDResponse{
+	out := &cp.GetVoucherByIDResponse{
 		Uuid:       c.UUID,
 		Code:       c.Code,
 		Percentage: percentage,
@@ -92,35 +90,7 @@ func (h *handlerGRPC) GetById(ctx context.Context, req *cp.GetByIDRequest) (*cp.
 	return out, nil
 }
 
-func (h *handlerGRPC) GetByID(ctx context.Context, req *cp.GetByIDRequest) (*cp.GetByIDResponse, error) {
-	c, err := h.app.GetVoucherByID(req.Uuid)
-
-	if err != nil {
-		return nil, err
-	}
-
-	if c == nil {
-		return nil, nil
-	}
-
-	percentage, err := strconv.ParseInt(c.Percentage, 10, 64)
-
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse percentage: %v", err)
-	}
-
-	out := &cp.GetByIDResponse{
-		Uuid:       c.UUID,
-		Code:       c.Code,
-		Percentage: percentage,
-		CreatedAt:  c.CreatedAt,
-		ExpiresAt:  c.ExpiresAt,
-	}
-
-	return out, nil
-}
-
-func (h *handlerGRPC) UpdateByID(ctx context.Context, req *cp.UpdateByIDRequest) (*cp.UpdateByIDResponse, error) {
+func (h *handlerGRPC) UpdateVoucherByID(ctx context.Context, req *cp.UpdateVoucherByIDRequest) (*cp.UpdateVoucherByIDResponse, error) {
 
 	input := dto.RequestVoucher{
 		Code:       req.Code,
@@ -143,7 +113,7 @@ func (h *handlerGRPC) UpdateByID(ctx context.Context, req *cp.UpdateByIDRequest)
 	if err != nil {
 	}
 
-	out := &cp.UpdateByIDResponse{
+	out := &cp.UpdateVoucherByIDResponse{
 		Uuid:       c.UUID,
 		Code:       c.Code,
 		Percentage: percentage,

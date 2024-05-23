@@ -1,13 +1,13 @@
 syntax = "proto3";
 option go_package = "fase-4-hf-voucher/voucher-proto";
 
-message CreateRequest {
+message CreateVoucherRequest {
   string code = 1;
-  int64 percentage  = 2;
+  int64 percentage = 2;
   string expiresAt = 3;
 }
 
-message CreateResponse {
+message CreateVoucherResponse {
   string uuid = 1;
   string code = 2;
   int64 percentage = 3;
@@ -15,9 +15,9 @@ message CreateResponse {
   string expiresAt = 5;
 }
 
-message GetByIDRequest { string uuid = 1; }
+message GetVoucherByIDRequest { string uuid = 1; }
 
-message GetByIDResponse {
+message GetVoucherByIDResponse {
   string uuid = 1;
   string code = 2;
   int64 percentage = 3;
@@ -25,7 +25,7 @@ message GetByIDResponse {
   string ExpiresAt = 5;
 }
 
-message UpdateByIDRequest {
+message UpdateVoucherByIDRequest {
   string uuid = 1;
   string code = 2;
   int64 percentage = 3;
@@ -33,18 +33,17 @@ message UpdateByIDRequest {
   string expiresAt = 5;
 }
 
-message UpdateByIDResponse {
+message UpdateVoucherByIDResponse {
   string uuid = 1;
   string code = 2;
   int64 percentage = 3;
   string createdAt = 4;
   string expiresAt = 5;
 }
-
-
 
 service Voucher {
-  rpc Create(CreateRequest) returns (CreateResponse);
-  rpc GetByID(GetByIDRequest) returns (GetByIDResponse);
-  rpc UpdateByID(UpdateByIDRequest) returns (UpdateByIDResponse);
+  rpc CreateVoucher(CreateVoucherRequest) returns (CreateVoucherResponse);
+  rpc GetVoucherByID(GetVoucherByIDRequest) returns (GetVoucherByIDResponse);
+  rpc UpdateVoucherByID(UpdateVoucherByIDRequest)
+      returns (UpdateVoucherByIDResponse);
 }

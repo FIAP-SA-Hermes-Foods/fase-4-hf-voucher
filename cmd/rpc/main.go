@@ -27,7 +27,7 @@ func init() {
 func main() {
 	ctx := context.Background()
 
-	listener, err := net.Listen("tcp", os.Getenv("API_RPC_PORT"))
+	listener, err := net.Listen("tcp", ":"+os.Getenv("API_RPC_PORT"))
 
 	if err != nil {
 		l.Errorf("error to create connection %v", " | ", err)
