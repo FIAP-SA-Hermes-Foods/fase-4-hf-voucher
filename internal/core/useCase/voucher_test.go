@@ -25,7 +25,7 @@ func Test_GetVoucherByID(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "not_valid_cpf",
+			name: "not_valid_code",
 			args: args{
 				id: "",
 			},
@@ -61,8 +61,8 @@ func Test_SaveVoucher(t *testing.T) {
 			args: args{
 				reqVoucher: dto.RequestVoucher{
 					UUID:       "",
-					Code:       "",
-					Percentage: "10",
+					Code:       "abc123",
+					Percentage: "50",
 					CreatedAt:  "",
 					ExpiresAt:  "",
 				},
@@ -70,7 +70,7 @@ func Test_SaveVoucher(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "not_valid_cpf",
+			name: "not_valid_code",
 			args: args{
 				reqVoucher: dto.RequestVoucher{
 					UUID:       "",
@@ -88,6 +88,86 @@ func Test_SaveVoucher(t *testing.T) {
 		uc := NewVoucherUseCase()
 		t.Run(tc.name, func(*testing.T) {
 			err := uc.SaveVoucher(tc.args.reqVoucher)
+			if (!tc.wantErr) && err != nil {
+				log.Panicf("unexpected error: %v", err)
+			}
+		})
+	}
+
+}
+
+// go test -v -failfast -run ^Test_UpdateVoucher$
+func Test_UpdateVoucher(t *testing.T) {
+
+	type args struct {
+		id         string
+		reqVoucher dto.RequestVoucher
+	}
+
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "success",
+			args: args{
+				id: "1",
+				reqVoucher: dto.RequestVoucher{
+					UUID:       "",
+					Code:       "abc123",
+					Percentage: "50",
+					CreatedAt:  "",
+					ExpiresAt:  "",
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "invalid_id",
+			args: args{
+				reqVoucher: dto.RequestVoucher{
+					UUID:       "",
+					Code:       "abc123",
+					Percentage: "-",
+					CreatedAt:  "",
+					ExpiresAt:  "",
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "invalid_code",
+			args: args{
+				reqVoucher: dto.RequestVoucher{
+					UUID:       "",
+					Code:       "",
+					Percentage: "-",
+					CreatedAt:  "",
+					ExpiresAt:  "",
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "not_valid_code",
+			args: args{
+				reqVoucher: dto.RequestVoucher{
+					UUID:       "",
+					Code:       "",
+					Percentage: "",
+					CreatedAt:  "",
+					ExpiresAt:  "",
+				},
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, tc := range tests {
+		uc := NewVoucherUseCase()
+		t.Run(tc.name, func(*testing.T) {
+			err := uc.UpdateVoucherByID(tc.args.id, tc.args.reqVoucher)
 			if (!tc.wantErr) && err != nil {
 				log.Panicf("unexpected error: %v", err)
 			}

@@ -25,7 +25,6 @@ func init() {
 }
 
 func main() {
-	ctx := context.Background()
 
 	listener, err := net.Listen("tcp", ":"+os.Getenv("API_RPC_PORT"))
 
@@ -34,6 +33,8 @@ func main() {
 	}
 
 	defer listener.Close()
+
+	ctx := context.Background()
 
 	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-east-1"))
 	if err != nil {
